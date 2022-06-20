@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
-
   @override
   State<Dashboard> createState() => _DashboardState();
 }
@@ -12,6 +11,77 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
+    TextEditingController titleCtr = TextEditingController();
+    TextEditingController descriptionCtr = TextEditingController();
+    TextEditingController dateCtr = TextEditingController();
+
+    void _updateItem(Map data) {
+      titleCtr.text = data['title'];
+      descriptionCtr.text = data['description'];
+      dateCtr.text = data['date'];
+      showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+                title: Text('Upate'),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: titleCtr,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextField(
+                      controller: descriptionCtr,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          isDense: true,
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 30, horizontal: 10)),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextField(
+                      controller: dateCtr,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                        width: 500,
+                        height: 50,
+                        child: OutlinedButton(
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    const Color.fromARGB(255, 70, 69, 68))),
+                            onPressed: () {
+                              Database.updateItem(
+                                  title: titleCtr.text,
+                                  description: descriptionCtr.text,
+                                  date: dateCtr.text,
+                                  idVal: data['docId']);
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                              'Update Task',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            )))
+                  ],
+                ),
+              ));
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Duty Manager'),
@@ -41,7 +111,12 @@ class _DashboardState extends State<Dashboard> {
                             style: const TextStyle(
                                 fontSize: 30, fontWeight: FontWeight.bold),
                           ),
-                          subtitle: Text("${data['description']}"),
+                          subtitle: Column(
+                            children: [
+                              Text('${data['description']}'),
+                              Text("${data['date']}")
+                            ],
+                          ),
                           trailing: SizedBox(
                             width: 100,
                             child: Row(
@@ -50,11 +125,10 @@ class _DashboardState extends State<Dashboard> {
                                 children: [
                                   IconButton(
                                       onPressed: () {
-                                        Navigator.pushNamed(
-                                            context, '/updateTask');
+                                        _updateItem(data);
                                       },
                                       icon: const Icon(
-                                        Icons.update,
+                                        Icons.edit,
                                         color: Colors.grey,
                                       )),
                                   IconButton(

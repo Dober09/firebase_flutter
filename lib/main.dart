@@ -1,6 +1,5 @@
 import 'package:fire_flutter/screens/addtask.dart';
 import 'package:fire_flutter/screens/dashboard.dart';
-import 'package:fire_flutter/screens/updatetask.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -29,9 +28,8 @@ class MyApp extends StatelessWidget {
       theme:
           ThemeData(primarySwatch: Colors.grey),
       routes: {
-        '/':(context) =>const Dashboard(),
+        '/':(context) => const Dashboard(),
         '/addTask': (context) =>const AddTask(),
-        '/updateTask':(context) =>const UpdateTask()
       },
     );
   }

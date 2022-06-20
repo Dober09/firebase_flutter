@@ -29,10 +29,9 @@ class Database {
     required String title,
     required String description,
     required String date,
-  
+    required String idVal
   }) async {
-    final docId = _mainCollection.id;
-    DocumentReference documentReference = _mainCollection.doc(docId);
+    DocumentReference documentReference = _mainCollection.doc(idVal);
 
     Map<String, dynamic> data = <String, dynamic>{
       'title': title,
@@ -62,3 +61,7 @@ class Database {
     return taskmainCollection.snapshots();
   }
 }
+
+
+
+
